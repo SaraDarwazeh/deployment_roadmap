@@ -1147,32 +1147,41 @@ sudo systemctl reload nginx                    <span class="c"># فعّلي ال
     return d;
   }
 
+  var PROXY='/api/ghanem';
   form.addEventListener('submit',function(e){
     e.preventDefault();
     var q=input.value.trim();
     if(!q)return;
-    var key=localStorage.getItem(GKEY);
     addMsg('me',q);input.value='';
-    if(!key){
-      addMsg('bot','غانم بده مفتاح عشان يحكي 🗝️ اضغطي ⚙️ فوق وحطي الـ API key (اللي معطيتك ياه صاحبتك).');
-      return;
-    }
     ghist.push({role:'user',content:q});
     if(ghist.length>14)ghist=ghist.slice(-14);
     var typing=addMsg('bot typing','غانم بفكر… 🤔');
     send.disabled=true;
-    fetch('https://api.anthropic.com/v1/messages',{
+    fetch(PROXY,{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':key,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:700,system:SYS,messages:ghist})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:ghist})
     }).then(function(r){
-      if(!r.ok)return r.json().then(function(j){throw {status:r.status,body:j}});
+      if(r.status===404||r.status===405||r.status===501)throw {noProxy:true};
+      if(!r.ok)return r.json().catch(function(){return{}}).then(function(j){throw {status:r.status,body:j}});
       return r.json();
+    }).catch(function(err){
+      if(err&&(err.status||err.noBot))throw err;
+      var key=localStorage.getItem(GKEY);
+      if(!key)throw {noBot:true};
+      return fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key':key,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:700,system:SYS,messages:ghist})
+      }).then(function(r){
+        if(!r.ok)return r.json().catch(function(){return{}}).then(function(j){throw {status:r.status,body:j,direct:true}});
+        return r.json();
+      });
     }).then(function(j){
       var text='';
       (j.content||[]).forEach(function(b){if(b.type==='text')text+=b.text});
@@ -1181,10 +1190,14 @@ sudo systemctl reload nginx                    <span class="c"># فعّلي ال
       typing.remove();addMsg('bot',text);
     }).catch(function(err){
       typing.remove();ghist.pop();
-      if(err&&err.status===401){
-        addMsg('bot','المفتاح مش مظبوط 🙃 اضغطي ⚙️ وتأكدي منه.');
+      if(err&&err.noBot){
+        addMsg('bot','غانم بصحى بس لما تكون الصفحة مرفوعة على سيرفرها 😴 وإذا معك API key، حطيه من ⚙️ فوق وبحكي معك من أي مكان.');
+      }else if(err&&err.status===401){
+        addMsg('bot',err.direct?'المفتاح مش مظبوط 🙃 اضغطي ⚙️ وتأكدي منه.':'مفتاح السيرفر مش مظبوط 🙃 خبري صاحبتك تشيك عليه.');
       }else if(err&&err.status===429){
         addMsg('bot','كثرتي أسئلة بسرعة 😅 خذي نفس وجربي بعد شوي.');
+      }else if(err&&err.status===503){
+        addMsg('bot','السيرفر شغال بس ناقصه المفتاح 🗝️ خبري صاحبتك.');
       }else if(err&&err.status){
         addMsg('bot','صار خلل من عند السيرفر ('+err.status+') — جربي كمان مرة.');
       }else{
