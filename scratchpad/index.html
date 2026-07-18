@@ -139,7 +139,8 @@ h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,34px);lin
 .cmds td{padding:8px 6px;border-bottom:1px solid var(--line2);vertical-align:top}
 .cmds tr:last-child td{border-bottom:none}
 .cmds td:first-child{white-space:nowrap}
-.cmds td:last-child{color:var(--ink2)}
+.cmds td:last-child{color:var(--ink)}
+.cmds .fun{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px}
 
 /* code blocks */
 .code{position:relative;background:var(--code-bg);border:1px solid var(--line2);color:var(--code-ink);border-radius:14px;margin:12px 0;font-family:var(--mono);font-size:12.8px;line-height:1.8;direction:ltr;text-align:left}
@@ -486,14 +487,14 @@ footer{text-align:center;color:var(--ink3);font-size:12.5px;padding:10px 20px 34
   </div>
   <div class="card">
     <table class="cmds">
-      <tr><td><span class="ltr">pwd</span></td><td>وينِك هلأ؟</td></tr>
-      <tr><td><span class="ltr">ls</span></td><td>شو في حواليكي؟</td></tr>
-      <tr><td><span class="ltr">cd اسم-المجلد</span></td><td>فوتي عالمجلد</td></tr>
-      <tr><td><span class="ltr">cd ..</span></td><td>ارجعي خطوة لورا</td></tr>
-      <tr><td><span class="ltr">nano ملف</span></td><td>افتحي الملف وعدلي عليه</td></tr>
-      <tr><td><span class="ltr">Ctrl+O ثم Ctrl+X</span></td><td>احفظي واطلعي من nano (أصعب لغز بالبرمجة، هلأ حليتيه)</td></tr>
-      <tr><td><span class="ltr">sudo أمر</span></td><td>نفذي الأمر بصلاحيات المدير العام</td></tr>
-      <tr><td><span class="ltr">clear</span></td><td>نظفي الشاشة وابدئي صفحة جديدة بحياتك</td></tr>
+      <tr><td><span class="ltr">pwd</span></td><td>بيطبعلك المسار الكامل للمجلد اللي واقفة فيه<span class="fun">يعني: وينِك هلأ؟</span></td></tr>
+      <tr><td><span class="ltr">ls</span></td><td>بيعرضلك أسماء الملفات والمجلدات اللي جوا مجلدك الحالي<span class="fun">يعني: شو في حواليكي؟</span></td></tr>
+      <tr><td><span class="ltr">cd اسم-المجلد</span></td><td>بينقلك لجوا هداك المجلد — الأوامر بعدها بتصير تشتغل هناك<span class="fun">يعني: فوتي عالمجلد</span></td></tr>
+      <tr><td><span class="ltr">cd ..</span></td><td>بيرجعك للمجلد اللي فوق مجلدك الحالي<span class="fun">يعني: ارجعي خطوة لورا</span></td></tr>
+      <tr><td><span class="ltr">nano ملف</span></td><td>بيفتحلك الملف بمحرر نصوص جوا التيرمنال عشان تعدلي عليه<span class="fun">Notepad بس بالشاشة السودا</span></td></tr>
+      <tr><td><span class="ltr">Ctrl+O ثم Ctrl+X</span></td><td>الأولى بتحفظ تعديلاتك بالملف، والثانية بتسكرلك nano<span class="fun">أصعب لغز بالبرمجة، هلأ حليتيه</span></td></tr>
+      <tr><td><span class="ltr">sudo أمر</span></td><td>بينفذ الأمر بصلاحيات الـ root — أعلى صلاحية بالنظام، لازمة لتعديل ملفات النظام<span class="fun">يعني: أنا المديرة هون، نفّذ</span></td></tr>
+      <tr><td><span class="ltr">clear</span></td><td>بيمسح كل النصوص القديمة من الشاشة<span class="fun">صفحة جديدة بحياتك ✨</span></td></tr>
     </table>
   </div>
   <div class="meme meme-split" style="--h:300px">
